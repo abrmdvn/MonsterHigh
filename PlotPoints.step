@@ -75,10 +75,61 @@ task ExecutePlotPoint ?event.
 # Generate text to describe the specified plot point. Fill in methods
 # for this, below.
 
-###
-### Place your code below
-###
+ExecutePlotPoint [confess_love ?a ?b]:
+    ?a confesses ?b/Possessive love to ?b.
+    [now [Knows ?b [CrushOn ?a ?b]]]
+[end] 
 
+ExecutePlotPoint [start_dating ?a ?b]:
+    ?a and ?b starts dating
+    [now [Dating ?a ?b]]
+#   Now ?a doens't know anymore about ?b's crush on ?a
+    [now [Not Knows ?a [CrushOn ?b ?a]]]
+[end]
+
+ExecutePlotPoint [romantic_rejection ?rejector ?rejected]: 
+    ?rejector rejected ?rejected
+    [now [Not [Knows ?rejector [CrushOn ?rejected ?rejector]]]]
+    [now [Not [CrushOn ?rejected ?rejector]]]
+    [now [Enemy ?rejected ?rejector]]
+[end]
+
+ExecutePlotPoint [fight ?attacker ?defender [triangle ?attacker ?defender ?loveInterest]]:
+    ?attacker fights with ?defender about the fact that ?attacker and ?defender are in love triangle with ?loveInterest
+    [now HadFightWith ?attacker ?defender]
+[end]
+
+ExecutePlotPoint [fight ?cheatee ?cheater [cheating ?cheater ?cheatee ?other]]:
+    ?cheatee fights with ?cheater about ?cheater/Obj cheating on ?cheatee/Obj with ?other.
+    [now HadFightWith ?cheatee ?cheater]
+[end]
+
+ExecutePlotPoint [fight ?cheatee ?other [cheating ?cheater ?cheatee ?other]]:
+    ?cheatee fights with ?other about ?cheater cheating on ?cheatee with ?other.
+    [now HadFightWith ?cheatee ?other]
+[end]
+
+ExecutePlotPoint [breakup ?char1 ?char2]:
+    ?char1 breaks up with ?char2. 
+    [now [RetractDating ?char1 ?char2]]
+    [now [RetractHadFightWith ?char1 ?char2]]
+    [now [Not [CrushOn ?char1 ?char2]]]
+    [now [Not [CrushOn ?char2 ?char1]]]
+[end]
+
+ExecutePlotPoint [smoldering_look ?a ?b ?club]: 
+    ?a gave ?b a smoldering look.
+[end]
+
+ExecutePlotPoint [star_crossed_lovers ?a ?atype ?b ?btype]:
+    ?a and ?b are star crossed lovers.. 
+    ?a like ?b/Obj and ?b like ?a/Obj but have rival monster types..
+[end]
+
+ExecutePlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ? supportee ?supporteeType ?crush ?crushType]]:
+    ?supporter supports ?supportee about ?supportee/Obj being star crossed lovers with ?crush.
+    [now [Confident ?supportee]]
+[end]
 
 PlotPoint [confess_love ?a ?b]: [CrushOn ?a ?b] [Not [Dating ?a ?b]]
 
@@ -114,15 +165,20 @@ PlotPoint [fight ?cheatee ?cheater [cheating ?cheater ?cheatee ?other]]:
     [CheatingOnWith ?cheater ?cheatee ?other]
 [end]
 
+PlotPoint [fight ?cheatee ?other [cheating ?cheater ?cheatee ?other]]:
+    [CheatingOnWith ?cheater ?cheatee ?other]
+[end]
+
 PlotPoint [breakup ?char1 ?char2]: 
     [Dating ?char1 ?char2] 
     [HadFightWith ?char1 ?char2]
 [end]
 
-##PlotPoint [smoldering_look ?a ?b ?_club]:
-##    [MutualAttraction ?a ?b] 
-##    [SameClub ?a ?b]
-##[end]
+# Do we need to add the fact check that they are at the club at this moment?
+PlotPoint [smoldering_look ?a ?b ?_club]: 
+   [MutualAttraction ?a ?b] 
+   [SameClub ?a ?b]
+[end]
 
 #Can show repetetive two way scenario. Add not =?
 PlotPoint [star_crossed_lovers ?a ?atype ?b ?btype]: 
