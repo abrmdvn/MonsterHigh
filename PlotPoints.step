@@ -175,9 +175,10 @@ PlotPoint [breakup ?char1 ?char2]:
 [end]
 
 # Do we need to add the fact check that they are at the club at this moment?
-PlotPoint [smoldering_look ?a ?b ?_club]: 
+PlotPoint [smoldering_look ?a ?b ?club]: 
    [MutualAttraction ?a ?b] 
-   [SameClub ?a ?b]
+   [InClub ?a ?club]
+   [InClub ?b ?club]
 [end]
 
 #Can show repetetive two way scenario. Add not =?
