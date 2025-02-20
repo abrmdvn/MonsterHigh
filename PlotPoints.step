@@ -103,7 +103,7 @@ ExecutePlotPoint [fight ?cheatee ?cheater [cheating ?cheater ?cheatee ?other]]:
     ?cheatee fights with ?cheater about ?cheater/Obj cheating on ?cheatee/Obj with ?other.
     [now HadFightWith ?cheatee ?cheater]
 [end]
-
+ 
 ExecutePlotPoint [fight ?cheatee ?other [cheating ?cheater ?cheatee ?other]]:
     ?cheatee fights with ?other about ?cheater cheating on ?cheatee with ?other.
     [now HadFightWith ?cheatee ?other]
