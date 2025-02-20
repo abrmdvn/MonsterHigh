@@ -82,9 +82,8 @@ ExecutePlotPoint [confess_love ?a ?b]:
 
 ExecutePlotPoint [start_dating ?a ?b]:
     ?a and ?b starts dating
-    [now [Dating ?a ?b]]
-#   Now ?a doens't know anymore about ?b's crush on ?a
-    [now [Not Knows ?a [CrushOn ?b ?a]]]
+    [now [DatingHelper ?a ?b]]
+    [now [Not [Knows ?a [CrushOn ?b ?a]]]]
 [end]
 
 ExecutePlotPoint [romantic_rejection ?rejector ?rejected]: 
@@ -96,19 +95,20 @@ ExecutePlotPoint [romantic_rejection ?rejector ?rejected]:
 
 ExecutePlotPoint [fight ?attacker ?defender [triangle ?attacker ?defender ?loveInterest]]:
     ?attacker fights with ?defender about the fact that ?attacker and ?defender are in love triangle with ?loveInterest
-    [now HadFightWith ?attacker ?defender]
+    [now [HadFightWithHelper ?attacker ?defender]]
 [end]
 
 ExecutePlotPoint [fight ?cheatee ?cheater [cheating ?cheater ?cheatee ?other]]:
     ?cheatee fights with ?cheater about ?cheater/Obj cheating on ?cheatee/Obj with ?other.
-    [now HadFightWith ?cheatee ?cheater]
+    [now [HadFightWithHelper ?cheatee ?cheater]]
 [end]
  
 ExecutePlotPoint [fight ?cheatee ?other [cheating ?cheater ?cheatee ?other]]:
     ?cheatee fights with ?other about ?cheater cheating on ?cheatee with ?other.
-    [now HadFightWith ?cheatee ?other]
+    [now [HadFightWithHelper ?cheatee ?other]]
 [end]
 
+# need to make sure this works
 ExecutePlotPoint [breakup ?char1 ?char2]:
     ?char1 breaks up with ?char2. 
     [now [RetractDating ?char1 ?char2]]
@@ -117,16 +117,16 @@ ExecutePlotPoint [breakup ?char1 ?char2]:
     [now [Not [CrushOn ?char2 ?char1]]]
 [end]
 
-ExecutePlotPoint [smoldering_look ?a ?b ?club]: 
+ExecutePlotPoint [smoldering_look ?a ?b ?_club]: 
     ?a gave ?b a smoldering look.
 [end]
 
 ExecutePlotPoint [star_crossed_lovers ?a ?atype ?b ?btype]:
     ?a and ?b are star crossed lovers.. 
-    ?a like ?b/Obj and ?b like ?a/Obj but have rival monster types..
+    ?a like ?b/Obj and ?b like ?a/Obj but have rival monster types, ?atype and ?btype..
 [end]
 
-ExecutePlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ? supportee ?supporteeType ?crush ?crushType]]:
+ExecutePlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ? supportee ?_supporteeType ?crush ?_crushType]]:
     ?supporter supports ?supportee about ?supportee/Obj being star crossed lovers with ?crush.
     [now [Confident ?supportee]]
 [end]
@@ -187,6 +187,7 @@ PlotPoint [star_crossed_lovers ?a ?atype ?b ?btype]:
     [StarCrossedLovers ?a ?atype ?b ?btype]
 [end]
 
+# Seems like this is not working
 PlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ?supportee ?supporteeType ?crush ?crushType]]: 
     [IsA ?supportee ?supporteeType]
     [IsA ?crush ?crushType]
