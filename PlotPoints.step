@@ -94,7 +94,7 @@ ExecutePlotPoint [romantic_rejection ?rejector ?rejected]:
 [end]
 
 ExecutePlotPoint [fight ?attacker ?defender [triangle ?attacker ?defender ?loveInterest]]:
-    ?attacker fights with ?defender about the fact that ?attacker and ?defender are in love triangle with ?loveInterest
+    ?attacker fights with ?defender about the fact that both of them are in love triangle with ?loveInterest
     [now [HadFightWithHelper ?attacker ?defender]]
 [end]
 
@@ -111,7 +111,6 @@ ExecutePlotPoint [fight ?cheatee ?other [cheating ?cheater ?cheatee ?other]]:
 ExecutePlotPoint [breakup ?char1 ?char2]:
     ?char1 breaks up with ?char2. 
     [now [Not [DatingHelper ?char1 ?char2]]]
-    [now [Not [DatingHelper ?char2 ?char1]]]
     [now [Not [HadFightWithHelper ?char1 ?char2]]]
     [now [Not [CrushOn ?char1 ?char2]]]
     [now [Not [CrushOn ?char2 ?char1]]]
@@ -142,21 +141,9 @@ ExecutePlotPoint [transition_for_love ?a ?oldtype ?lover ?newtype]:
 [end]
 
 ExecutePlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?breaker ?supportee]]:
-   ?supporter supports ?supportee about ?breaker breaking up with ?supportee/Obj.
-   ?supportee feels much better after getting support form ?supporter/Obj.
-    [now [Not [DatingHelper ?char1 ?char2]]]
-    [now [Not [DatingHelper ?char2 ?char1]]]
-    [now [Not [HadFightWithHelper ?char1 ?char2]]]
-    [now [Not [CrushOn ?breaker ?supportee]]]
+   ?supporter supports ?supportee about ?supportee/Obj having a fight with ?breaker, who is ?supportee's crush.
+    After the support, ?supportee is now moving on.. ?supportee doesn't have crush on ?breaker/Obj anymore.
     [now [Not [CrushOn ?supportee ?breaker]]]
-    [now [Confident ?supportee]]
-[end]
-
-ExecutePlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?rejector ?supportee]]:
-    ?supporter supports ?supportee about ?rejector rejecting ?supportee/Possessive love.
-    [now [Not [Knows ?rejector [CrushOn ?supportee ?rejector]]]]
-    [now [Not [CrushOn ?supportee ?rejector]]]
-    [now [Enemy ?supportee ?rejector]]
     [now [Confident ?supportee]]
 [end]
 
@@ -237,13 +224,7 @@ PlotPoint [transition_for_love ?a ?oldtype ?lover ?newtype]:
 [end]
 
 PlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?breaker ?supportee]]:
-    [Dating ?breaker ?supportee] 
     [HadFightWith ?breaker ?supportee]
-    [Friend ?supporter ?supportee]
-[end]
-
-PlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?rejector ?supportee]]:
-    [Knows ?rejector [CrushOn ?supportee ?rejector]]
-    [UnrequitedLove ?supportee ?rejector]
+    [CrushOn ?supportee ?breaker]
     [Friend ?supporter ?supportee]
 [end]
