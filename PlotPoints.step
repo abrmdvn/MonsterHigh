@@ -76,7 +76,7 @@ task ExecutePlotPoint ?event.
 # for this, below.
 
 ExecutePlotPoint [confess_love ?a ?b]:
-    ?a confesses ?b/Possessive love to ?b.
+    ?a confesses ?a/Possessive love to ?b/Obj.
     [now [Knows ?b [CrushOn ?a ?b]]]
 [end] 
 
@@ -104,15 +104,15 @@ ExecutePlotPoint [fight ?cheatee ?cheater [cheating ?cheater ?cheatee ?other]]:
 [end]
  
 ExecutePlotPoint [fight ?cheatee ?other [cheating ?cheater ?cheatee ?other]]:
-    ?cheatee fights with ?other about ?cheater cheating on ?cheatee with ?other.
+    ?cheatee fights with ?other about ?cheater cheating on ?cheatee/Obj with ?other.
     [now [HadFightWithHelper ?cheatee ?other]]
 [end]
 
-# need to make sure this works
 ExecutePlotPoint [breakup ?char1 ?char2]:
     ?char1 breaks up with ?char2. 
-    [now [RetractDating ?char1 ?char2]]
-    [now [RetractHadFightWith ?char1 ?char2]]
+    [now [Not [DatingHelper ?char1 ?char2]]]
+    [now [Not [DatingHelper ?char2 ?char1]]]
+    [now [Not [HadFightWithHelper ?char1 ?char2]]]
     [now [Not [CrushOn ?char1 ?char2]]]
     [now [Not [CrushOn ?char2 ?char1]]]
 [end]
@@ -123,7 +123,7 @@ ExecutePlotPoint [smoldering_look ?a ?b ?_club]:
 
 ExecutePlotPoint [star_crossed_lovers ?a ?atype ?b ?btype]:
     ?a and ?b are star crossed lovers.. 
-    ?a like ?b/Obj and ?b like ?a/Obj but have rival monster types, ?atype and ?btype..
+    ?a likes ?b/Obj and ?b likes ?a/Obj but have rival monster types, ?atype and ?btype..
 [end]
 
 ExecutePlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ?supportee ?_supporteeType ?crush ?_crushType]]:
@@ -140,6 +140,26 @@ ExecutePlotPoint [transition_for_love ?a ?oldtype ?lover ?newtype]:
     Perhaps desperately, yet motivated by love for ?lover, ?a transitions from a ?oldtype to a ?newtype.
     [now [Not [IsA ?a ?oldtype]] [IsA ?a ?newtype]]
 [end]
+
+ExecutePlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?breaker ?supportee]]:
+   ?supporter supports ?supportee about ?breaker breaking up with ?supportee/Obj.
+   ?supportee feels much better after getting support form ?supporter/Obj.
+    [now [Not [DatingHelper ?char1 ?char2]]]
+    [now [Not [DatingHelper ?char2 ?char1]]]
+    [now [Not [HadFightWithHelper ?char1 ?char2]]]
+    [now [Not [CrushOn ?breaker ?supportee]]]
+    [now [Not [CrushOn ?supportee ?breaker]]]
+    [now [Confident ?supportee]]
+[end]
+
+ExecutePlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?rejector ?supportee]]:
+    ?supporter supports ?supportee about ?rejector rejecting ?supportee/Possessive love.
+    [now [Not [Knows ?rejector [CrushOn ?supportee ?rejector]]]]
+    [now [Not [CrushOn ?supportee ?rejector]]]
+    [now [Enemy ?supportee ?rejector]]
+    [now [Confident ?supportee]]
+[end]
+
 
 PlotPoint [confess_love ?a ?b]: [CrushOn ?a ?b] [Not [Dating ?a ?b]]
 
@@ -184,7 +204,6 @@ PlotPoint [breakup ?char1 ?char2]:
     [HadFightWith ?char1 ?char2]
 [end]
 
-# Do we need to add the fact check that they are at the club at this moment?
 PlotPoint [smoldering_look ?a ?b ?club]: 
    [MutualAttraction ?a ?b] 
    [InClub ?a ?club]
@@ -198,7 +217,6 @@ PlotPoint [star_crossed_lovers ?a ?atype ?b ?btype]:
     [StarCrossedLovers ?a ?atype ?b ?btype]
 [end]
 
-# Seems like this is not working
 PlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ?supportee ?supporteeType ?crush ?crushType]]: 
     [IsA ?supportee ?supporteeType]
     [IsA ?crush ?crushType]
@@ -216,4 +234,16 @@ PlotPoint [transition_for_love ?a ?oldtype ?lover ?newtype]:
     [CrushOn ?a ?lover]
     [IsA ?lover ?newtype]
     [Not [= ?oldtype ?newtype]]
+[end]
+
+PlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?breaker ?supportee]]:
+    [Dating ?breaker ?supportee] 
+    [HadFightWith ?breaker ?supportee]
+    [Friend ?supporter ?supportee]
+[end]
+
+PlotPoint [support_from_friend ?supporter ?supportee [heart_broken ?rejector ?supportee]]:
+    [Knows ?rejector [CrushOn ?supportee ?rejector]]
+    [UnrequitedLove ?supportee ?rejector]
+    [Friend ?supporter ?supportee]
 [end]
