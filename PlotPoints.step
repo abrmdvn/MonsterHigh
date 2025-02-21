@@ -82,7 +82,7 @@ ExecutePlotPoint [confess_love ?a ?b]:
 
 ExecutePlotPoint [start_dating ?a ?b]:
     ?a and ?b starts dating
-    [now [DatingHelper ?a ?b]]
+    [now [Dating ?a ?b]]
     [now [Not [Knows ?a [CrushOn ?b ?a]]]]
 [end]
 
@@ -95,23 +95,23 @@ ExecutePlotPoint [romantic_rejection ?rejector ?rejected]:
 
 ExecutePlotPoint [fight ?attacker ?defender [triangle ?attacker ?defender ?loveInterest]]:
     ?attacker fights with ?defender about the fact that both of them are in love triangle with ?loveInterest
-    [now [HadFightWithHelper ?attacker ?defender]]
+    [now [HadFightWith ?attacker ?defender]]
 [end]
 
 ExecutePlotPoint [fight ?cheatee ?cheater [cheating ?cheater ?cheatee ?other]]:
     ?cheatee fights with ?cheater about ?cheater/Obj cheating on ?cheatee/Obj with ?other.
-    [now [HadFightWithHelper ?cheatee ?cheater]]
+    [now [HadFightWith ?cheatee ?cheater]]
 [end]
  
 ExecutePlotPoint [fight ?cheatee ?other [cheating ?cheater ?cheatee ?other]]:
     ?cheatee fights with ?other about ?cheater cheating on ?cheatee/Obj with ?other.
-    [now [HadFightWithHelper ?cheatee ?other]]
+    [now [HadFightWith ?cheatee ?other]]
 [end]
 
 ExecutePlotPoint [breakup ?char1 ?char2]:
     ?char1 breaks up with ?char2. 
-    [now [Not [DatingHelper ?char1 ?char2]]]
-    [now [Not [HadFightWithHelper ?char1 ?char2]]]
+    [now [Not [Dating ?char1 ?char2]]]
+    [now [Not [HadFightWith ?char1 ?char2]]]
     [now [Not [CrushOn ?char1 ?char2]]]
     [now [Not [CrushOn ?char2 ?char1]]]
 [end]
