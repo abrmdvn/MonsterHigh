@@ -126,9 +126,19 @@ ExecutePlotPoint [star_crossed_lovers ?a ?atype ?b ?btype]:
     ?a like ?b/Obj and ?b like ?a/Obj but have rival monster types, ?atype and ?btype..
 [end]
 
-ExecutePlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ? supportee ?_supporteeType ?crush ?_crushType]]:
+ExecutePlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ?supportee ?_supporteeType ?crush ?_crushType]]:
     ?supporter supports ?supportee about ?supportee/Obj being star crossed lovers with ?crush.
     [now [Confident ?supportee]]
+[end]
+
+ExecutePlotPoint [transition ?a ?oldtype ?newtype]:
+    After deep consideration, ?a betrays ?a/Possessive ?oldtype family and transitions to become a ?newtype.
+    [now [Not [IsA ?a ?oldtype]] [IsA ?a ?newtype]]
+[end]
+
+ExecutePlotPoint [transition_for_love ?a ?oldtype ?lover ?newtype]:
+    Perhaps desperately, yet motivated by love for ?lover, ?a transitions from a ?oldtype to a ?newtype.
+    [now [Not [IsA ?a ?oldtype]] [IsA ?a ?newtype]]
 [end]
 
 PlotPoint [confess_love ?a ?b]: [CrushOn ?a ?b] [Not [Dating ?a ?b]]
@@ -194,4 +204,16 @@ PlotPoint [support_from_friend ?supporter ?supportee [star_crossed_lovers ?suppo
     [IsA ?crush ?crushType]
     [StarCrossedLovers ?supportee ?supporteeType ?crush ?crushType] 
     [Friend ?supporter ?supportee]
+[end]
+
+PlotPoint [transition ?a ?oldtype ?newtype]:
+    [IsA ?a ?oldtype]
+    [RivalMonsterTypes ?oldtype ?newtype] 
+[end]
+
+PlotPoint [transition_for_love ?a ?oldtype ?lover ?newtype]:
+    [IsA ?a ?oldtype]
+    [CrushOn ?a ?lover]
+    [IsA ?lover ?newtype]
+    [Not [= ?oldtype ?newtype]]
 [end]
